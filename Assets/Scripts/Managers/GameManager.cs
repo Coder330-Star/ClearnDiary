@@ -12,11 +12,13 @@ public class GameManager : MonoSingleton<GameManager>
     private float volume;//音量大小
     private float joyStickSize;//虚拟摇杆的尺寸
 
-    private void Awake()
+    [HideInInspector]
+    public Player player;
+
+    public override void Init()
     {
         DontDestroyOnLoad(gameObject);
     }
-
 
 
     /// <summary>

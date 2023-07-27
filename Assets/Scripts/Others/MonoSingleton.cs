@@ -9,10 +9,13 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
     {
         get
         {
-            if (instance = null)
+            if (instance == null)
             {
-                Debug.Log(typeof(T).ToString() + "is null.");
+                Debug.Log(typeof(T).ToString() + " is null.");
+                //GameObject go = new GameObject(typeof(T).ToString());
+                //go.AddComponent<T>();
             }
+
             return instance;
         }
     }
@@ -20,5 +23,14 @@ public class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T>
     private void Awake()
     {
         instance = this as T;
+        Init();
+    }
+
+    /// <summary>
+    /// 初始化数据
+    /// </summary>
+    public virtual void Init() 
+    {
+
     }
 }
