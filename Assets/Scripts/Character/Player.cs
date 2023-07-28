@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         curHp = maxHP = 100;
-        speed = 2;
+        speed = 5;
         regenHpSpeed = delayRegen = 1;
         rig2D = GetComponent<Rigidbody2D>();
         au = GetComponent<AudioSource>();        
@@ -49,18 +49,21 @@ public class Player : MonoBehaviour
     }
 
     private void Move() 
-    {        
+    {
+        isMoving = false;
         if (Input.GetKey(KeyCode.W))
         {
             //前
             rig2D.AddForce(Vector2.up * speed * 70 * Time.deltaTime);
             moveAngle = 0;
+            isMoving = true;
         }
         else if (Input.GetKey(KeyCode.S))
         {
             //后
             rig2D.AddForce(Vector2.down * speed * 70 * Time.deltaTime);
             moveAngle = 180;
+            isMoving = true;
         }
 
         if (Input.GetKey(KeyCode.A))
@@ -68,16 +71,17 @@ public class Player : MonoBehaviour
             //左
             rig2D.AddForce(Vector2.left * speed * 70 * Time.deltaTime);
             moveAngle = 90;
+            isMoving = true;
         }
         else if (Input.GetKey(KeyCode.D))
         {
             //右
             rig2D.AddForce(Vector2.right * speed * 70 * Time.deltaTime);
             moveAngle = -90;
+            isMoving = true;
         }
 
-        ///旋转角度
-        transform.rotation = Quaternion.Euler(0, 0, moveAngle);
+        
     }
 
 

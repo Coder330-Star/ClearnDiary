@@ -39,14 +39,12 @@ public class PlayerAIM : MonoBehaviour
             {
                 if (!hit2D.collider.gameObject.CompareTag("Wall"))
                 {                    
-                    distance = Vector3.Distance(transform.position, player.enemys[i].transform.position);
-                    Debug.Log("distance:     " + distance);
-                    if (distance <= maxDis && distance > minDis)
+                    distance = Vector3.Distance(transform.position, player.enemys[i].transform.position);                    
+                    if (distance <= maxDis && distance < minDis)
                     {
                         minDis = distance;
                         //表示在玩家视野里面
-                        nearestEnemy = player.enemys[i];
-                        
+                        nearestEnemy = player.enemys[i];                        
                     }
                 }
             }
@@ -55,7 +53,7 @@ public class PlayerAIM : MonoBehaviour
         if (nearestEnemy != null)
         {
             mark.SetActive(true);
-            mark.transform.position = hit2D.collider.transform.position;
+            mark.transform.position = nearestEnemy.transform.position;
 
             ///终点减去起点，方向指向终点
             Vector3 moveDir = nearestEnemy.transform.position - transform.position;
@@ -68,8 +66,19 @@ public class PlayerAIM : MonoBehaviour
                 float angle = Mathf.Atan2(moveDir.x, moveDir.y) * Mathf.Rad2Deg;
                 transform.rotation = Quaternion.AngleAxis(angle, -Vector3.forward);
             }
+            if (hit2D.collider.CompareTag("Wall"))
+            {
+                nearestEnemy = null;
+                minDis = maxDis = 10;
+            }
         }
-        
+        else
+        {
+            mark.SetActive(false);
+            ///旋转角度
+            transform.rotation = Quaternion.Euler(0, 0, player.moveAngle);
+        }
+        cameraTrans.position = new Vector3(transform.position.x, transform.position.y, -7.8f);
         
     }
 }
