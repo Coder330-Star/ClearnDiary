@@ -34,8 +34,8 @@ public class GameManager : MonoSingleton<GameManager>
     {
         DontDestroyOnLoad(gameObject);
         weaponPropertiesList = new List<WeaponProperties>();
-        SaveByJson();
-        //LoadWeaponPropertiesInfo();
+        //SaveByJson();
+        LoadWeaponPropertiesInfo();
     }
 
 
@@ -81,8 +81,6 @@ public class GameManager : MonoSingleton<GameManager>
                 Debug.Log("读取武器信息配置表失败！！");
                 return;
             }
-        }
-
-        
+        }        
     }
 }
