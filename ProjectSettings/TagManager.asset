@@ -6,6 +6,13 @@ TagManager:
   tags:
   - Wall
   - Bullet
+  - Mine
+  - BulletItem
+  - HealthItem
+  - MineItem
+  - TurretItem
+  - MoneyItem
+  - Box
   layers:
   - Default
   - TransparentFX

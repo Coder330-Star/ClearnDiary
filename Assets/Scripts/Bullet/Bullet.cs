@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
 {
     public float lifeTime;
     public float speed;
-    public ParticleSystem destroyPs;
+    public GameObject destroyPs;
 
     void Start()
     {
@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour
     
     void Update()
     {
-        transform.Translate(transform.up * Time.deltaTime * speed);
+        transform.Translate(transform.up * Time.deltaTime * speed,Space.World);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -35,6 +35,7 @@ public class PlayerAIM : MonoBehaviour
         {
             hit2D = Physics2D.Raycast(transform.position, player.enemys[i].transform.position - transform.position,100,layer);
             Debug.DrawRay(transform.position, player.enemys[i].transform.position - transform.position, Color.red);
+            //Debug.Log(hit2D.collider.name);
             if (hit2D.collider != null)
             {
                 if (!hit2D.collider.gameObject.CompareTag("Wall"))
@@ -52,8 +53,11 @@ public class PlayerAIM : MonoBehaviour
 
         if (nearestEnemy != null)
         {
+            mark.transform.SetParent(nearestEnemy.transform);
+            //mark.transform.position = nearestEnemy.transform.position;
+            mark.transform.localPosition = Vector3.zero;
+            mark.transform.rotation = transform.rotation;
             mark.SetActive(true);
-            mark.transform.position = nearestEnemy.transform.position;
 
             ///终点减去起点，方向指向终点
             Vector3 moveDir = nearestEnemy.transform.position - transform.position;

@@ -10,6 +10,7 @@ public class PlayerShoot : MonoBehaviour
     public GameObject[] turrets;//炮塔
     public AudioClip[] shootClips;//射击音频
     public AudioClip reloadClip;
+    public GameObject minePrefabs;
 
     //引用
     [Header("****************引用****************")]
@@ -26,7 +27,7 @@ public class PlayerShoot : MonoBehaviour
     public float minInaccuracy;//最小不精确度   
     public float attackCD;//攻击CD    
     public int magazine;//弹夹里的子弹数量
-    public int totalBullects;//总子弹数量
+    public int totalBullets;//总子弹数量
     public float reload;//装弹时间
     public float weight;//枪重
     public float repulsion;//子弹击退力
@@ -36,25 +37,31 @@ public class PlayerShoot : MonoBehaviour
     public float curDestabilization;//当前不稳定性
     public float curAttackCD;//当前攻击CD
     public int curMagazine;//当前弹夹里的子弹数量
-    public int curBullects;//当前全部字弹数量
-    public float curReload;//装弹CD
-    public bool hasTurret;//是否有炮台
+    public int curBullets;//当前全部字弹数量
+    public float curReload;//装弹CD    
     public int curMine;//当前地雷数量
     public int mines;//当前可持有的最大地雷数量
+    public bool hasTurret;//是否有炮台
 
     private WeaponProperties weaponProperties;
     private Player player;
     private AudioSource au;
     private int gunLevel;
+    private int turretLevel;
 
     private void Start()
     {
         player = GameManager.Instance.player;
         gunLevel = (int)GameManager.Instance.gunLevel;
         hasTurret = true;
-        curMine = mines = 3;
-        weaponProperties = GameManager.Instance.weaponPropertiesList[gunLevel];
+        curMine = mines = 3;        
+        weaponProperties = GameManager.Instance.weaponPropertiesList[gunLevel-1];
         weapons[gunLevel - 1].SetActive(true);
+        turretLevel = ((int)GameManager.Instance.gunLevel) / 2;
+        if (turretLevel < 1)
+        {
+            turretLevel = 1;
+        }
 
         maxInaccuracy = (float)weaponProperties.maxInaccuracy;
         recoilForce = (float)weaponProperties.recoilForce;
@@ -63,15 +70,16 @@ public class PlayerShoot : MonoBehaviour
         minInaccuracy = (float)weaponProperties.minInaccuracy;
         attackCD = (float)weaponProperties.attackCD;
         magazine = weaponProperties.magazine;
-        totalBullects = weaponProperties.totalBullects;
+        totalBullets = weaponProperties.totalBullects;
         reload = (float)weaponProperties.reload;
         weight = (float)weaponProperties.weight;
         repulsion = (float)weaponProperties.repulsion;
 
         au = GetComponent<AudioSource>();
-        curBullects = totalBullects;
+        curBullets = totalBullets;
         curMagazine = magazine;
         curReload = curAttackCD = 0;
+        player.playerShoot = this;
     }
 
 
@@ -133,7 +141,7 @@ public class PlayerShoot : MonoBehaviour
     /// </summary>
     private void MonitorInput() 
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             Shoot();
         }
@@ -148,6 +156,7 @@ public class PlayerShoot : MonoBehaviour
             if (hasTurret)
             {
                 hasTurret = false;
+                Instantiate(turrets[turretLevel-1], transform.position, Quaternion.identity);
             }
         }
 
@@ -159,6 +168,7 @@ public class PlayerShoot : MonoBehaviour
                 return;
             }
             curMine -= 1;
+            Instantiate(minePrefabs, transform.position, Quaternion.identity);
         }
 
     }
@@ -169,7 +179,7 @@ public class PlayerShoot : MonoBehaviour
     private void Shoot() 
     {
         //有子弹，弹夹里面有子弹，攻击cd<0
-        if (curBullects > 0 && curMagazine > 0 && curAttackCD <= 0)
+        if (curBullets > 0 && curMagazine > 0 && curAttackCD <= 0)
         {
             
             au.PlayOneShot(shootClips[gunLevel - 1],GameManager.Instance.volume);
@@ -200,7 +210,7 @@ public class PlayerShoot : MonoBehaviour
                 flash.Play();
             }
             curMagazine -= 1;
-            curBullects -= 1;
+            curBullets -= 1;
             curAttackCD = attackCD;
             curInaccuracy += recoilForce;
             if (curInaccuracy > maxInaccuracy)
@@ -257,25 +267,25 @@ public class PlayerShoot : MonoBehaviour
     /// <summary>
     /// 
     /// </summary>
-    private void CreateBullect(int bullectIndex)
+    private void CreateBullect(int bulletIndex)
     {
-        if (bullectIndex == 2)
+        if (bulletIndex == 2)
         {
             //霰弹枪特殊处理
-            Instantiate(bullets[bullectIndex - 1], transform.position, Quaternion.Euler(
+            Instantiate(bullets[bulletIndex], transform.position, Quaternion.Euler(
                         new Vector3(0, 0, transform.eulerAngles.z - curInaccuracy)));
-            Instantiate(bullets[bullectIndex - 1], transform.position, Quaternion.Euler(
+            Instantiate(bullets[bulletIndex], transform.position, Quaternion.Euler(
                         new Vector3(0, 0, transform.eulerAngles.z - curInaccuracy * 0.5f)));
-            Instantiate(bullets[bullectIndex - 1], transform.position, Quaternion.Euler(
+            Instantiate(bullets[bulletIndex], transform.position, Quaternion.Euler(
                         new Vector3(0, 0, transform.eulerAngles.z)));
-            Instantiate(bullets[bullectIndex - 1], transform.position, Quaternion.Euler(
+            Instantiate(bullets[bulletIndex], transform.position, Quaternion.Euler(
                         new Vector3(0, 0, transform.eulerAngles.z + curInaccuracy * 0.5f)));
-            Instantiate(bullets[bullectIndex - 1], transform.position, Quaternion.Euler(
+            Instantiate(bullets[bulletIndex], transform.position, Quaternion.Euler(
                         new Vector3(0, 0, transform.eulerAngles.z + curInaccuracy)));
         }
         else
         {
-            Instantiate(bullets[bullectIndex - 1], transform.position, Quaternion.Euler(
+            Instantiate(bullets[bulletIndex], transform.position, Quaternion.Euler(
                         new Vector3(0, 0, transform.eulerAngles.z + Random.Range(-curInaccuracy, curInaccuracy))));
         }
                

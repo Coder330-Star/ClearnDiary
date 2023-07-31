@@ -5,8 +5,7 @@ using System.IO;
 using UnityEngine;
 
 public class AppConfig
-{
-
+{    
     private static Dictionary<string, string> configs = new Dictionary<string, string>();
 
     /// <summary>
@@ -39,7 +38,7 @@ public class AppConfig
         byte[] data = null;
         data = File.ReadAllBytes(path);
         string a = System.Text.Encoding.Default.GetString(data);
-        Debug.Log("a:    " + a);
+        Debug.Log(a);
     }
 
 }
