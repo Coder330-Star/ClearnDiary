@@ -20,7 +20,10 @@ public class Player : MonoBehaviour
     public float delayTimer;//可回复血量计时器
     public int regenHpSpeed;//HP回复速度
     public int delayRegen;//收到伤害可再次回复HP时的延迟时间
+    public int targetkills;//通关需要的击杀数
+    public int curKills;//当前击杀数
     public List<Enemy> enemys = new List<Enemy>();
+    public PlayerShoot playerShoot;
 
 
     //[Header("*********组件**********")]
@@ -36,7 +39,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         curHp = maxHP = 100;
-        speed = 5;
+        speed = 8;
         regenHpSpeed = delayRegen = 1;
         rig2D = GetComponent<Rigidbody2D>();
         au = GetComponent<AudioSource>();        
@@ -104,5 +107,116 @@ public class Player : MonoBehaviour
         {
             delayTimer -= Time.deltaTime;
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        string colTag = collision.tag;
+        switch (colTag)
+        {
+            case "BulletItem":                
+                if (playerShoot.curBullets < playerShoot.totalBullets)
+                {
+                    DestroyItem(collision.gameObject);
+                    playerShoot.curBullets += (int)(playerShoot.totalBullets * 0.25f);
+                    if (playerShoot.curBullets > playerShoot.totalBullets)
+                    {
+                        playerShoot.curBullets = playerShoot.totalBullets;
+                    }
+                }
+                break;
+            case "HealthItem":
+                if (curHp < maxHP)
+                {
+                    DestroyItem(collision.gameObject);
+                    curHp += 20;
+                    if (curHp > maxHP)
+                    {
+                        curHp = maxHP;
+                    }
+                }
+                break;
+            case "MineItem":
+                if (playerShoot.curMine < 3)
+                {
+                    DestroyItem(collision.gameObject);
+                    playerShoot.curMine += 1;
+                }
+                break;
+
+            case "TurretItem":
+                if (!playerShoot.hasTurret)
+                {
+                    DestroyItem(collision.gameObject);
+                    playerShoot.hasTurret = true;
+                }
+
+                break;
+
+            case "MoneyItem":
+                DestroyItem(collision.gameObject);
+                GameManager.Instance.money += 10;
+                break;
+            case "Key":
+                collision.GetComponent<Item_Key>().OpenDoor();
+                DestroyItem(collision.gameObject);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Box"))
+        {
+            //子弹补给箱
+            if (collision.gameObject.name.Contains("Bullet"))
+            {
+                if (playerShoot.curBullets < playerShoot.totalBullets)
+                {
+                    playerShoot.curBullets += (int)(playerShoot.totalBullets * 0.25f);
+                    DestroyItem(collision.gameObject);
+                    if (playerShoot.curBullets > playerShoot.totalBullets)
+                    {
+                        playerShoot.curBullets = playerShoot.totalBullets;
+                    }
+                }              
+            }
+            else if (collision.gameObject.name.Contains("Health")) 
+            {
+                //医疗补给箱
+                if (curHp < maxHP)
+                {
+                    DestroyItem(collision.gameObject);
+                    curHp += 20;
+                    if (curHp > maxHP)
+                    {
+                        curHp = maxHP;
+                    }
+                }
+            }
+            else if (collision.gameObject.name.Contains("Turret"))
+            {
+                //炮塔补给箱
+                if (playerShoot.curMine < 3)
+                {
+                    DestroyItem(collision.gameObject);
+                    playerShoot.curMine += 1;
+                }
+                if (!playerShoot.hasTurret)
+                {
+                    DestroyItem(collision.gameObject);
+                    playerShoot.hasTurret = true;
+                }
+            }
+
+        }
+    }
+
+    private void DestroyItem(GameObject collision) 
+    {
+        Destroy(collision);
+        au.PlayOneShot(bonus, GameManager.Instance.volume * 0.5f);
     }
 }

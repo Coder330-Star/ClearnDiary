@@ -16,9 +16,9 @@ public enum GunLevel
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    private int money;//金币数量
-    private int unlockLevel;//解锁关卡
-    private int curSelectLevel;//当前选择的关卡
+    public int money;//金币数量
+    public int unlockLevel;//解锁关卡
+    public int curSelectLevel;//当前选择的关卡
     public GunLevel gunLevel;
 
     public float volume;//音量大小
