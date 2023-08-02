@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2207829323807003868}
   - component: {fileID: 2207829323807003871}
   - component: {fileID: 6185872011734757529}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Lock
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2207829324618713704}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: DoorItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,7 +154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2207829324923222215}
   - component: {fileID: 2207829324923222214}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Unlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}

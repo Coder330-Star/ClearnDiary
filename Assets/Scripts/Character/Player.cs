@@ -57,14 +57,14 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             //前
-            rig2D.AddForce(Vector2.up * speed * 70 * Time.deltaTime);
+            rig2D.AddForce(Vector2.up * speed / (1 + playerShoot.weight * 0.1f) * 70 * Time.deltaTime);
             moveAngle = 0;
             isMoving = true;
         }
         else if (Input.GetKey(KeyCode.S))
         {
             //后
-            rig2D.AddForce(Vector2.down * speed * 70 * Time.deltaTime);
+            rig2D.AddForce(Vector2.down * speed / (1 + playerShoot.weight * 0.1f) * 70 * Time.deltaTime);
             moveAngle = 180;
             isMoving = true;
         }
@@ -72,19 +72,17 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             //左
-            rig2D.AddForce(Vector2.left * speed * 70 * Time.deltaTime);
+            rig2D.AddForce(Vector2.left * speed / (1 + playerShoot.weight * 0.1f) * 70 * Time.deltaTime);
             moveAngle = 90;
             isMoving = true;
         }
         else if (Input.GetKey(KeyCode.D))
         {
             //右
-            rig2D.AddForce(Vector2.right * speed * 70 * Time.deltaTime);
+            rig2D.AddForce(Vector2.right * speed / (1 + playerShoot.weight * 0.1f) * 70 * Time.deltaTime);
             moveAngle = -90;
             isMoving = true;
-        }
-
-        
+        }        
     }
 
 
@@ -143,16 +141,13 @@ public class Player : MonoBehaviour
                     playerShoot.curMine += 1;
                 }
                 break;
-
             case "TurretItem":
                 if (!playerShoot.hasTurret)
                 {
                     DestroyItem(collision.gameObject);
                     playerShoot.hasTurret = true;
                 }
-
                 break;
-
             case "MoneyItem":
                 DestroyItem(collision.gameObject);
                 GameManager.Instance.money += 10;

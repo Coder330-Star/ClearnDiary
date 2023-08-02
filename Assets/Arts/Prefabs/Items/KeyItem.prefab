@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6338189190628302016}
   - component: {fileID: 6338189190628302017}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,9 +96,9 @@ GameObject:
   - component: {fileID: 6338189190801762276}
   - component: {fileID: 6338189190801762278}
   - component: {fileID: 6338189190801762279}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: KeyItem
-  m_TagString: Untagged
+  m_TagString: Key
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -159,7 +159,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 21848210717527e4e8c2daab696e1deb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -199,3 +199,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9e91803ac074a24fb9ef1f61ed36b01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lockDoor: {fileID: 0}
+  unlockDoor: {fileID: 0}

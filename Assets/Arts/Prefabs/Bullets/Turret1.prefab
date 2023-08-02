@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b14081f0ffa5cad44a5a6fed9285660c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mark: {fileID: 0}
+  mark: {fileID: 3835969149844554349}
   bulletGo: {fileID: 7645257147410804081, guid: df609d4dab5f2ac44992cf059a141afb, type: 3}
   shootPoints:
   - {fileID: 3835969150535733685}

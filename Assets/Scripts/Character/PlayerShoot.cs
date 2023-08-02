@@ -265,7 +265,7 @@ public class PlayerShoot : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// 创建子弹
     /// </summary>
     private void CreateBullect(int bulletIndex)
     {

@@ -33,14 +33,18 @@ public class PlayerAIM : MonoBehaviour
     {        
         for (int i = 0; i < player.enemys.Count; i++)
         {
+            if (player.enemys[i] == null)
+            {
+                return;
+            }
             hit2D = Physics2D.Raycast(transform.position, player.enemys[i].transform.position - transform.position,100,layer);
-            Debug.DrawRay(transform.position, player.enemys[i].transform.position - transform.position, Color.red);
-            //Debug.Log(hit2D.collider.name);
+            Debug.DrawRay(transform.position, player.enemys[i].transform.position - transform.position, Color.red);           
             if (hit2D.collider != null)
             {
                 if (!hit2D.collider.gameObject.CompareTag("Wall"))
                 {                    
-                    distance = Vector3.Distance(transform.position, player.enemys[i].transform.position);                    
+                    distance = Vector3.Distance(transform.position, player.enemys[i].transform.position);
+                    //Debug.Log("distance:" + distance);
                     if (distance <= maxDis && distance < minDis)
                     {
                         minDis = distance;
@@ -50,15 +54,11 @@ public class PlayerAIM : MonoBehaviour
                 }
             }
         }
-
+        
         if (nearestEnemy != null)
         {
-            mark.transform.SetParent(nearestEnemy.transform);
-            //mark.transform.position = nearestEnemy.transform.position;
-            mark.transform.localPosition = Vector3.zero;
-            mark.transform.rotation = transform.rotation;
+            
             mark.SetActive(true);
-
             ///终点减去起点，方向指向终点
             Vector3 moveDir = nearestEnemy.transform.position - transform.position;
             if (moveDir != Vector3.zero)
@@ -84,5 +84,14 @@ public class PlayerAIM : MonoBehaviour
         }
         cameraTrans.position = new Vector3(transform.position.x, transform.position.y, -7.8f);
         
+    }
+
+    private void LateUpdate()
+    {
+        //Debug.Log("LateUpdate:" + nearestEnemy);
+        if (nearestEnemy != null)
+        {
+            mark.transform.position = nearestEnemy.transform.position;            
+        }
     }
 }
