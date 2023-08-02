@@ -21,17 +21,17 @@ public class Enemy : MonoBehaviour
     public GameObject explosion;//踩到敌人后的爆炸特效
 
     //私有变量,引用
-    private Transform playerTrans;
-    private Rigidbody2D rigid2D;
-    private Player player;
-    private RaycastHit2D hit2D;
-    private bool follow;//是否跟随
-    private Vector3 playerLastPos;//玩家最后一次出现再怪物视野中的位置
-    public float curHp;//当前血量值
+    protected Transform playerTrans;
+    protected Rigidbody2D rigid2D;
+    protected Player player;
+    protected RaycastHit2D hit2D;
+    protected bool follow;//是否跟随
+    protected Vector3 playerLastPos;//玩家最后一次出现再怪物视野中的位置
+    protected float curHp;//当前血量值
 
 
 
-    private void Start()
+    protected virtual void Start()
     {
         player = GameManager.Instance.player;
         player.enemys.Add(this);
@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
     }
 
 
-    private void Update()
+    protected virtual void Update()
     {
         //Debug.Log(curHp);
         hit2D = Physics2D.Raycast(transform.position, playerTrans.position - transform.position, 5, layer);
@@ -51,75 +51,12 @@ public class Enemy : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// 搜索跟随玩家
-    /// </summary>
-    void SearchAndFollowPlayer() 
-    {
-        if (follow && Vector3.Distance(transform.position,playerTrans.position) <= 0.1f)
-        {
-            follow = false;
-        }
-        if (hit2D.collider != null)
-        {            
-            if (!hit2D.collider.gameObject.CompareTag("Wall"))
-            {                
-                Vector3 moveDir = playerTrans.position - transform.position;
-                if (moveDir != Vector3.zero)
-                {
-                    float angle = Mathf.Atan2(moveDir.x, moveDir.y) * Mathf.Rad2Deg;
-                    transform.rotation = Quaternion.AngleAxis(angle, Vector3.back);
-                    follow = true;
-                    playerLastPos = playerTrans.position;
-                }
-            }
-            else if (follow)
-            {
-                //表示搜索敌人
-                Vector3 moveDir = playerLastPos - transform.position;
-                if (moveDir != Vector3.zero)
-                {
-                    float angle = Mathf.Atan2(moveDir.x, moveDir.y) * Mathf.Rad2Deg;
-                    transform.rotation = Quaternion.AngleAxis(angle, Vector3.back);
-                    //playerLastPos = transform.position;
-                }
-            }
-        }
-        else if (follow)
-        {
-            //表示搜索敌人
-            Vector3 moveDir = playerLastPos - transform.position;
-            if (moveDir != Vector3.zero)
-            {
-                float angle = Mathf.Atan2(moveDir.x, moveDir.y) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.AngleAxis(angle, Vector3.back);
-                //playerLastPos = transform.position;
-            }
-        }
-    }
 
-
-
-    private void Move()
-    {
-        if (hit2D.collider != null)
-        {
-            if (hit2D.collider.gameObject.CompareTag("Player"))
-            {
-                rigid2D.AddRelativeForce(new Vector2(0, speed));
-            }
-        }
-        if (follow)
-        {
-            rigid2D.AddRelativeForce(new Vector2(0,speed));
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Bullet"))
         {
-            Instantiate(bloodPS, transform.position, Quaternion.Euler(0,0, 
+            Instantiate(bloodPS, transform.position, Quaternion.Euler(0, 0,
                 collision.transform.rotation.eulerAngles.z + 180));
             int gunlevel = (int)GameManager.Instance.gunLevel;
             if (collision.gameObject.name.Contains("0"))
@@ -127,10 +64,8 @@ public class Enemy : MonoBehaviour
                 curHp -= 10 * gunlevel * 0.5f;
                 Instantiate(bloodGos[0], transform.position, Quaternion.Euler(0, 0,
                     collision.transform.rotation.eulerAngles.z + Random.Range(-15, 15)));
-                //Instantiate(bloodGos[0], transform.position, Quaternion.identity);
-                //Debug.Log(collision.transform.localRotation.eulerAngles.z + 180);
-            } 
-            else if (collision.gameObject.name.Contains("1")) 
+            }
+            else if (collision.gameObject.name.Contains("1"))
             {
                 curHp -= 50;
                 Instantiate(bloodGos[1], transform.position, Quaternion.Euler(0, 0,
@@ -162,7 +97,7 @@ public class Enemy : MonoBehaviour
         Die();
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    protected void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
@@ -176,11 +111,65 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 搜索跟随玩家
+    /// </summary>
+    protected void SearchAndFollowPlayer() 
+    {
+        if (follow && Vector3.Distance(transform.position,playerTrans.position) <= 0.1f)
+        {
+            follow = false;
+        }
+        if (hit2D.collider != null)
+        {            
+            if (!hit2D.collider.gameObject.CompareTag("Wall"))
+            {
+                LookAtPlayerAndAttack();
+            }
+            else if (follow)
+            {
+                //表示搜索敌人
+                Vector3 moveDir = playerLastPos - transform.position;
+                if (moveDir != Vector3.zero)
+                {
+                    float angle = Mathf.Atan2(moveDir.x, moveDir.y) * Mathf.Rad2Deg;
+                    transform.rotation = Quaternion.AngleAxis(angle, Vector3.back);                    
+                }
+            }
+        }
+        else if (follow)
+        {
+            //表示搜索敌人
+            Vector3 moveDir = playerLastPos - transform.position;
+            if (moveDir != Vector3.zero)
+            {
+                float angle = Mathf.Atan2(moveDir.x, moveDir.y) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.AngleAxis(angle, Vector3.back);                
+            }
+        }
+    }
+
+
+    protected void Move()
+    {
+        if (hit2D.collider != null)
+        {
+            if (hit2D.collider.gameObject.CompareTag("Player"))
+            {
+                rigid2D.AddRelativeForce(new Vector2(0, speed));
+            }
+        }
+        if (follow)
+        {
+            rigid2D.AddRelativeForce(new Vector2(0, speed));
+        }
+    }
+
 
     /// <summary>
     /// 敌人死亡
     /// </summary>
-    private void Die() 
+    protected void Die() 
     {
         if (curHp <= 0)
         {
@@ -192,5 +181,16 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    
+    protected virtual void LookAtPlayerAndAttack() 
+    {
+        Vector3 moveDir = playerTrans.position - transform.position;
+        if (moveDir != Vector3.zero)
+        {
+            float angle = Mathf.Atan2(moveDir.x, moveDir.y) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.back);
+            follow = true;
+            playerLastPos = playerTrans.position;
+        }
+    }
+
 }

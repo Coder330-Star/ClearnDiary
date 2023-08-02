@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -112,6 +113,18 @@ public class Player : MonoBehaviour
         string colTag = collision.tag;
         switch (colTag)
         {
+            case "Bullet":
+                Instantiate(bloodPriticle, transform.position, Quaternion.Euler(0, 0, collision.transform.rotation.eulerAngles.z + 180));
+                Instantiate(blood, transform.position, Quaternion.Euler(0, 0, collision.transform.rotation.eulerAngles.z + 180));
+                DestroyItem(collision.gameObject);
+                curHp -= 10;
+                if (curHp <= 0)
+                {
+                    //表示主角死亡
+                    PlayerPrefs.SetInt("Money", GameManager.Instance.money);
+                    SceneManager.LoadScene(0);
+                }
+                break;
             case "BulletItem":                
                 if (playerShoot.curBullets < playerShoot.totalBullets)
                 {
