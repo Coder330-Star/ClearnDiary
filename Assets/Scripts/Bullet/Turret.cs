@@ -17,6 +17,7 @@ public class Turret : MonoBehaviour
     public float attackCD;
     public int bullets;
     public float inaccuracy;
+    public bool isEnemy;
 
     private float minDis;
     private float maxDis;
@@ -53,69 +54,107 @@ public class Turret : MonoBehaviour
             curAttackCD -= Time.deltaTime;
         }
 
-        for (int i = 0; i < player.enemys.Count; i++)
+        if (isEnemy)
         {
-            hit2D = Physics2D.Raycast(transform.position, player.enemys[i].transform.position - transform.position, 100, layer);
-            Debug.DrawRay(transform.position, player.enemys[i].transform.position - transform.position, Color.red);            
+            hit2D = Physics2D.Raycast(transform.position, player.transform.position - transform.position, 100, layer);
+            Debug.DrawRay(transform.position, player.transform.position - transform.position, Color.red);
             if (hit2D.collider != null)
             {
                 if (!hit2D.collider.gameObject.CompareTag("Wall"))
                 {
-                    distance = Vector3.Distance(transform.position, player.enemys[i].transform.position);
-                    if (distance <= maxDis && distance < minDis)
+                    ///终点减去起点，方向指向终点
+                    Vector3 moveDir = player.transform.position - transform.position;
+                    if (moveDir != Vector3.zero)
                     {
-                        minDis = distance;
-                        //表示在玩家视野里面
-                        nearestEnemy = player.enemys[i];
+                        //正弦sin   对边比斜边
+                        //余弦cos   邻边比斜边
+                        //正切tan   对边比邻边
+                        //Atan2返回的是弧度值，需要转化为角度值
+                        float angle = Mathf.Atan2(moveDir.x, moveDir.y) * Mathf.Rad2Deg;
+                        transform.rotation = Quaternion.AngleAxis(angle, -Vector3.forward);
+                    }
+                    if (curAttackCD <= 0 && bullets > 0)
+                    {
+                        Instantiate(bulletGo, shootPoints[0].position, Quaternion.Euler(0, 0, transform.eulerAngles.z +
+                            Random.Range(-inaccuracy, inaccuracy)));
+                        if (turretLevel >= 3)
+                        {
+                            Instantiate(bulletGo, shootPoints[1].position, Quaternion.Euler(0, 0, transform.eulerAngles.z +
+                            Random.Range(-inaccuracy, inaccuracy)));
+                        }
+                        au.PlayOneShot(shootClip, GameManager.Instance.volume * 0.6f);
+                        curAttackCD = attackCD;
+                        bullets -= 1;
                     }
                 }
             }
         }
-
-        if (nearestEnemy != null)
-        {
-            mark.transform.SetParent(nearestEnemy.transform);
-            mark.transform.localPosition = Vector3.zero;
-            mark.transform.rotation = transform.rotation;
-            mark.SetActive(true);
-
-            ///终点减去起点，方向指向终点
-            Vector3 moveDir = nearestEnemy.transform.position - transform.position;
-            if (moveDir != Vector3.zero)
-            {
-                //正弦sin   对边比斜边
-                //余弦cos   邻边比斜边
-                //正切tan   对边比邻边
-                //Atan2返回的是弧度值，需要转化为角度值
-                float angle = Mathf.Atan2(moveDir.x, moveDir.y) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.AngleAxis(angle, -Vector3.forward);
-            }
-            if (curAttackCD <= 0 && bullets > 0)
-            {
-                Instantiate(bulletGo, shootPoints[0].position, Quaternion.Euler(0, 0, transform.eulerAngles.z +
-                    Random.Range(-inaccuracy, inaccuracy)));
-                if (turretLevel >= 3)
-                {
-                    Instantiate(bulletGo, shootPoints[1].position, Quaternion.Euler(0, 0, transform.eulerAngles.z +
-                    Random.Range(-inaccuracy, inaccuracy)));
-                }
-                au.PlayOneShot(shootClip, GameManager.Instance.volume * 0.6f);
-                curAttackCD = attackCD;
-                bullets -= 1;
-            }
-
-
-            if (hit2D.collider.CompareTag("Wall"))
-            {
-                nearestEnemy = null;
-                minDis = maxDis = 7;
-            }
-        }
         else
         {
-            mark.SetActive(false);
-            ///旋转角度
-            //transform.rotation = Quaternion.Euler(0, 0, player.moveAngle);
-        }
+            for (int i = 0; i < player.enemys.Count; i++)
+            {
+                hit2D = Physics2D.Raycast(transform.position, player.enemys[i].transform.position - transform.position, 100, layer);
+                Debug.DrawRay(transform.position, player.enemys[i].transform.position - transform.position, Color.red);
+                if (hit2D.collider != null)
+                {
+                    if (!hit2D.collider.gameObject.CompareTag("Wall"))
+                    {
+                        distance = Vector3.Distance(transform.position, player.enemys[i].transform.position);
+                        if (distance <= maxDis && distance < minDis)
+                        {
+                            minDis = distance;
+                            //表示在玩家视野里面
+                            nearestEnemy = player.enemys[i];
+                        }
+                    }
+                }
+            }
+
+            if (nearestEnemy != null)
+            {
+                mark.transform.SetParent(nearestEnemy.transform);
+                mark.transform.localPosition = Vector3.zero;
+                mark.transform.rotation = transform.rotation;
+                mark.SetActive(true);
+
+                ///终点减去起点，方向指向终点
+                Vector3 moveDir = nearestEnemy.transform.position - transform.position;
+                if (moveDir != Vector3.zero)
+                {
+                    //正弦sin   对边比斜边
+                    //余弦cos   邻边比斜边
+                    //正切tan   对边比邻边
+                    //Atan2返回的是弧度值，需要转化为角度值
+                    float angle = Mathf.Atan2(moveDir.x, moveDir.y) * Mathf.Rad2Deg;
+                    transform.rotation = Quaternion.AngleAxis(angle, -Vector3.forward);
+                }
+                if (curAttackCD <= 0 && bullets > 0)
+                {
+                    Instantiate(bulletGo, shootPoints[0].position, Quaternion.Euler(0, 0, transform.eulerAngles.z +
+                        Random.Range(-inaccuracy, inaccuracy)));
+                    if (turretLevel >= 3)
+                    {
+                        Instantiate(bulletGo, shootPoints[1].position, Quaternion.Euler(0, 0, transform.eulerAngles.z +
+                        Random.Range(-inaccuracy, inaccuracy)));
+                    }
+                    au.PlayOneShot(shootClip, GameManager.Instance.volume * 0.6f);
+                    curAttackCD = attackCD;
+                    bullets -= 1;
+                }
+
+
+                if (hit2D.collider.CompareTag("Wall"))
+                {
+                    nearestEnemy = null;
+                    minDis = maxDis = 7;
+                }
+            }
+            else
+            {
+                mark.SetActive(false);
+                ///旋转角度
+                //transform.rotation = Quaternion.Euler(0, 0, player.moveAngle);
+            }
+        }        
     }
 }

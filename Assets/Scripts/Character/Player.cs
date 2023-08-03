@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     public GameObject blood;//血迹
     public GameObject bloodPriticle;//减血特效
     public AudioClip bonus;//奖励音效
+    public GameObject explosion;//爆炸特效
+    public GameObject deadBooldGo;
 
     //数据
     [Header("*********数据**********")]
@@ -113,17 +115,12 @@ public class Player : MonoBehaviour
         string colTag = collision.tag;
         switch (colTag)
         {
-            case "Bullet":
+            case "EnemyBullet":
                 Instantiate(bloodPriticle, transform.position, Quaternion.Euler(0, 0, collision.transform.rotation.eulerAngles.z + 180));
                 Instantiate(blood, transform.position, Quaternion.Euler(0, 0, collision.transform.rotation.eulerAngles.z + 180));
                 DestroyItem(collision.gameObject);
                 curHp -= 10;
-                if (curHp <= 0)
-                {
-                    //表示主角死亡
-                    PlayerPrefs.SetInt("Money", GameManager.Instance.money);
-                    SceneManager.LoadScene(0);
-                }
+                Die();
                 break;
             case "BulletItem":                
                 if (playerShoot.curBullets < playerShoot.totalBullets)
@@ -168,6 +165,13 @@ public class Player : MonoBehaviour
             case "Key":
                 collision.GetComponent<Item_Key>().OpenDoor();
                 DestroyItem(collision.gameObject);
+                break;
+            case "EnemyMine":
+                //地雷
+                Instantiate(explosion, transform.position, Quaternion.identity);
+                curHp -= 60;
+                Destroy(collision.gameObject);
+                Die();
                 break;
             default:
                 break;
@@ -226,5 +230,19 @@ public class Player : MonoBehaviour
     {
         Destroy(collision);
         au.PlayOneShot(bonus, GameManager.Instance.volume * 0.5f);
+    }
+
+
+    /// <summary>
+    /// 角色死亡
+    /// </summary>
+    public void Die() 
+    {
+        if (curHp <= 0)
+        {
+            GameManager.Instance.LoadMainScene();
+            Instantiate(deadBooldGo, transform.position, transform.rotation);
+            Destroy(gameObject);
+        }
     }
 }

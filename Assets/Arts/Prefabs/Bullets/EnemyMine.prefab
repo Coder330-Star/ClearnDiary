@@ -97,8 +97,8 @@ GameObject:
   - component: {fileID: 7105843854422983303}
   - component: {fileID: 4069109313698027347}
   m_Layer: 2
-  m_Name: Mine
-  m_TagString: Mine
+  m_Name: EnemyMine
+  m_TagString: EnemyMine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

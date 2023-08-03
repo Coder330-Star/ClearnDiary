@@ -42,10 +42,12 @@ public class Enemy : MonoBehaviour
 
 
     protected virtual void Update()
-    {
-        //Debug.Log(curHp);
-        hit2D = Physics2D.Raycast(transform.position, playerTrans.position - transform.position, 5, layer);
-        //Debug.DrawRay(transform.position, playerTrans.position - transform.position,Color.red);
+    {        
+        if (playerTrans == null)
+        {
+            return;
+        }
+        hit2D = Physics2D.Raycast(transform.position, playerTrans.position - transform.position, 5, layer);        
         SearchAndFollowPlayer();
         Move();
     }
@@ -85,7 +87,7 @@ public class Enemy : MonoBehaviour
             }
             //给敌人一个击退力
             rigid2D.AddRelativeForce(new Vector2(0, player.playerShoot.repulsion));
-        }
+         }
 
         if (collision.CompareTag("Mine"))
         {
@@ -103,11 +105,7 @@ public class Enemy : MonoBehaviour
         {
             player.curHp -= 0.1f;
             player.delayTimer = player.delayRegen;
-            if (player.curHp <= 0)
-            {
-                PlayerPrefs.SetInt("Money", GameManager.Instance.money);
-                SceneManager.LoadScene(0);
-            }
+            player.Die();
         }
     }
 
@@ -169,7 +167,7 @@ public class Enemy : MonoBehaviour
     /// <summary>
     /// 敌人死亡
     /// </summary>
-    protected void Die() 
+    protected virtual void Die() 
     {
         if (curHp <= 0)
         {

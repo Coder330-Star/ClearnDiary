@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using LitJson;
 using System.IO;
-
+using UnityEngine.SceneManagement;
 
 public enum GunLevel 
 {
@@ -16,20 +16,21 @@ public enum GunLevel
 
 public class GameManager : MonoSingleton<GameManager>
 {
+    [HideInInspector]
     public int money;//金币数量
     public int unlockLevel;//解锁关卡
-    public int curSelectLevel;//当前选择的关卡
-    public GunLevel gunLevel;
-
+    public int curSelectLevel;//当前选择的关卡    
     public float volume;//音量大小
-    private float joyStickSize;//虚拟摇杆的尺寸
-
+    public bool anthonyIsDead;
+    
+    public GunLevel gunLevel;
     public List<WeaponProperties> weaponPropertiesList;
 
     [HideInInspector]
     public Player player;
 
-    
+    private float joyStickSize;//虚拟摇杆的尺寸
+
     public override void Init()
     {
         DontDestroyOnLoad(gameObject);
@@ -82,5 +83,18 @@ public class GameManager : MonoSingleton<GameManager>
                 return;
             }
         }        
+    }
+
+
+    public void LoadMainScene() 
+    {
+        //表示主角死亡
+        PlayerPrefs.SetInt("Money", money);
+        Invoke("DelayLoadScene", 2);
+    }
+
+    private void DelayLoadScene() 
+    {
+        SceneManager.LoadScene(0);
     }
 }

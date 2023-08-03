@@ -20,8 +20,11 @@ public class Bullet : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
-    {        
-        Instantiate(destroyPs, transform.position, Quaternion.identity);
-        Destroy(gameObject);
+    {
+        if (collision.CompareTag("Wall"))
+        {
+            Instantiate(destroyPs, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }        
     }
 }
