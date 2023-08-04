@@ -56,7 +56,7 @@ public class Turret : MonoBehaviour
 
         if (isEnemy)
         {
-            hit2D = Physics2D.Raycast(transform.position, player.transform.position - transform.position, 100, layer);
+            hit2D = Physics2D.Raycast(transform.position, player.transform.position - transform.position, 3, layer);
             Debug.DrawRay(transform.position, player.transform.position - transform.position, Color.red);
             if (hit2D.collider != null)
             {
@@ -93,7 +93,7 @@ public class Turret : MonoBehaviour
         {
             for (int i = 0; i < player.enemys.Count; i++)
             {
-                hit2D = Physics2D.Raycast(transform.position, player.enemys[i].transform.position - transform.position, 100, layer);
+                hit2D = Physics2D.Raycast(transform.position, player.enemys[i].transform.position - transform.position, 10, layer);
                 Debug.DrawRay(transform.position, player.enemys[i].transform.position - transform.position, Color.red);
                 if (hit2D.collider != null)
                 {
@@ -112,9 +112,9 @@ public class Turret : MonoBehaviour
 
             if (nearestEnemy != null)
             {
-                mark.transform.SetParent(nearestEnemy.transform);
-                mark.transform.localPosition = Vector3.zero;
-                mark.transform.rotation = transform.rotation;
+                //mark.transform.SetParent(nearestEnemy.transform);
+                //mark.transform.localPosition = Vector3.zero;
+                //mark.transform.rotation = transform.rotation;
                 mark.SetActive(true);
 
                 ///终点减去起点，方向指向终点
@@ -143,11 +143,6 @@ public class Turret : MonoBehaviour
                 }
 
 
-                if (hit2D.collider.CompareTag("Wall"))
-                {
-                    nearestEnemy = null;
-                    minDis = maxDis = 7;
-                }
             }
             else
             {
@@ -156,5 +151,28 @@ public class Turret : MonoBehaviour
                 //transform.rotation = Quaternion.Euler(0, 0, player.moveAngle);
             }
         }        
+    }
+
+    private void LateUpdate()
+    {
+        if (!isEnemy)
+        {
+            //表示不是敌人的炮塔
+            if (nearestEnemy != null)
+            {
+                mark.transform.position = nearestEnemy.transform.position;
+                if (hit2D.collider.CompareTag("Wall"))
+                {
+                    nearestEnemy = null;
+                    minDis = maxDis = 7;
+                }
+            }
+            else
+            {
+                maxDis = minDis = 10;
+                nearestEnemy = null;
+            }
+        }
+        
     }
 }

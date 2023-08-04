@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5319673839666022595}
   - component: {fileID: 5319673839666022592}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 5319673840873856741}
   - component: {fileID: 5319673840873856744}
   - component: {fileID: 5319673840873856747}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: HoleRed
   m_TagString: Untagged
   m_Icon: {fileID: 0}

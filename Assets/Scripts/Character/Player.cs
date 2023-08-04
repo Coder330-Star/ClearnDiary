@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
     public int curKills;//当前击杀数
     public List<Enemy> enemys = new List<Enemy>();
     public PlayerShoot playerShoot;
-
+    public bool bossIsDead;
 
     //[Header("*********组件**********")]
     private Rigidbody2D rig2D;
@@ -42,10 +42,15 @@ public class Player : MonoBehaviour
     private void Start()
     {
         curHp = maxHP = 100;
-        speed = 8;
+        speed = 15;
         regenHpSpeed = delayRegen = 1;
         rig2D = GetComponent<Rigidbody2D>();
-        au = GetComponent<AudioSource>();        
+        au = GetComponent<AudioSource>();
+        if (GameManager.Instance.curSelectLevel == 6)
+        {
+            //表示是boss
+            bossIsDead = false;
+        }
     }
 
     private void Update()

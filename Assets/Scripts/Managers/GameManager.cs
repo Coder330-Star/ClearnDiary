@@ -25,18 +25,31 @@ public class GameManager : MonoSingleton<GameManager>
     
     public GunLevel gunLevel;
     public List<WeaponProperties> weaponPropertiesList;
+    public bool isBossDead;
 
     [HideInInspector]
     public Player player;
 
     private float joyStickSize;//虚拟摇杆的尺寸
 
+
     public override void Init()
+    {
+        
+    }
+
+    private void OnEnable()
     {
         DontDestroyOnLoad(gameObject);
         weaponPropertiesList = new List<WeaponProperties>();
         //SaveByJson();
         LoadWeaponPropertiesInfo();
+        LoadMainScene();
+        if (GameManager.Instance.curSelectLevel == 6)
+        {
+            //表示是boss
+            isBossDead = false;
+        }
     }
 
 

@@ -19,7 +19,7 @@ public class FinishPoint : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            if (player.curKills >= player.targetkills)
+            if (player.curKills >= player.targetkills && player.bossIsDead)
             {
                 PlayerPrefs.SetInt("Money", GameManager.Instance.money);
                 PlayerPrefs.SetInt("Levels", GameManager.Instance.unlockLevel + 1);

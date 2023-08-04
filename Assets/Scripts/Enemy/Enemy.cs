@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour
     public int reward;//被击杀后的奖励
     [Tooltip("屏蔽Player层和IgnoreRaycast层")]
     public LayerMask layer;
+    public bool isBoss;
 
     //资源
     [Header("*********资源**********")]
@@ -47,7 +48,7 @@ public class Enemy : MonoBehaviour
         {
             return;
         }
-        hit2D = Physics2D.Raycast(transform.position, playerTrans.position - transform.position, 5, layer);        
+        hit2D = Physics2D.Raycast(transform.position, playerTrans.position - transform.position, 4, layer);        
         SearchAndFollowPlayer();
         Move();
     }
@@ -171,6 +172,10 @@ public class Enemy : MonoBehaviour
     {
         if (curHp <= 0)
         {
+            if (isBoss)
+            {
+                player.bossIsDead = true;
+            }
             Instantiate(bloodDeadGo, transform.position, transform.rotation);
             GameManager.Instance.player.curKills += 1;
             GameManager.Instance.money += reward;

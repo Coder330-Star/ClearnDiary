@@ -37,7 +37,7 @@ public class PlayerAIM : MonoBehaviour
             {
                 return;
             }
-            hit2D = Physics2D.Raycast(transform.position, player.enemys[i].transform.position - transform.position,100,layer);
+            hit2D = Physics2D.Raycast(transform.position, player.enemys[i].transform.position - transform.position,4,layer);
             Debug.DrawRay(transform.position, player.enemys[i].transform.position - transform.position, Color.red);           
             if (hit2D.collider != null)
             {
@@ -54,10 +54,10 @@ public class PlayerAIM : MonoBehaviour
                 }
             }
         }
-        
+
+        //Debug.Log("nearestEnemy:   " + nearestEnemy);
         if (nearestEnemy != null)
-        {
-            
+        {            
             mark.SetActive(true);
             ///终点减去起点，方向指向终点
             Vector3 moveDir = nearestEnemy.transform.position - transform.position;
@@ -70,11 +70,11 @@ public class PlayerAIM : MonoBehaviour
                 float angle = Mathf.Atan2(moveDir.x, moveDir.y) * Mathf.Rad2Deg;
                 transform.rotation = Quaternion.AngleAxis(angle, -Vector3.forward);
             }
-            if (hit2D.collider.CompareTag("Wall"))
-            {
-                nearestEnemy = null;
-                minDis = maxDis = 10;
-            }
+            //if (hit2D.collider.CompareTag("Wall"))
+            //{
+            //    nearestEnemy = null;
+            //    minDis = maxDis = 10;
+            //}
         }
         else
         {
@@ -88,10 +88,22 @@ public class PlayerAIM : MonoBehaviour
 
     private void LateUpdate()
     {
-        //Debug.Log("LateUpdate:" + nearestEnemy);
         if (nearestEnemy != null)
         {
-            mark.transform.position = nearestEnemy.transform.position;            
+            mark.transform.position = nearestEnemy.transform.position;
+            if (hit2D.collider!=null)
+            {
+                if (hit2D.collider.CompareTag("Wall"))
+                {
+                    minDis = maxDis = 10;
+                    nearestEnemy = null;
+                }
+            }
+        }
+        else
+        {
+            minDis = maxDis = 10;
+            nearestEnemy = null;
         }
     }
 }
