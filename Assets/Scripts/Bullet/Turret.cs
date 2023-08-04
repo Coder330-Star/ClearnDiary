@@ -54,6 +54,16 @@ public class Turret : MonoBehaviour
             curAttackCD -= Time.deltaTime;
         }
 
+        if (player == null)
+        {
+            return;
+        }
+
+        if (player.transform == null)
+        {
+            return;
+        }
+
         if (isEnemy)
         {
             hit2D = Physics2D.Raycast(transform.position, player.transform.position - transform.position, 3, layer);

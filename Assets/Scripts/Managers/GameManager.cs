@@ -35,23 +35,12 @@ public class GameManager : MonoSingleton<GameManager>
 
     public override void Init()
     {
-        
-    }
-
-    private void OnEnable()
-    {
         DontDestroyOnLoad(gameObject);
         weaponPropertiesList = new List<WeaponProperties>();
         //SaveByJson();
         LoadWeaponPropertiesInfo();
         LoadMainScene();
-        if (GameManager.Instance.curSelectLevel == 6)
-        {
-            //表示是boss
-            isBossDead = false;
-        }
     }
-
 
     /// <summary>
     /// 加载存储在本地的游戏数据
