@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5503761435606414520}
   - component: {fileID: 5503761435606414521}
-  m_Layer: 2
+  m_Layer: 11
   m_Name: mipmapIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

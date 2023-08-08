@@ -10,13 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 6906982340345107132}
   - component: {fileID: 6906982340345107133}
-  m_Layer: 9
+  m_Layer: 11
   m_Name: MinMapIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6906982340345107132
 Transform:
   m_ObjectHideFlags: 0
@@ -5981,7 +5981,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6906982341815790483
 Transform:
   m_ObjectHideFlags: 0
@@ -6250,10 +6250,11 @@ MonoBehaviour:
   delayTimer: 0
   regenHpSpeed: 0
   delayRegen: 0
-  targetkills: 0
+  targetkills: 12
   curKills: 0
   enemys: []
   playerShoot: {fileID: 0}
+  bossIsDead: 0
 --- !u!114 &6906982342140424685
 MonoBehaviour:
   m_ObjectHideFlags: 0

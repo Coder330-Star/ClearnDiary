@@ -16,21 +16,23 @@ public enum GunLevel
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    [HideInInspector]
+    //[HideInInspector]
     public int money;//金币数量
     public int unlockLevel;//解锁关卡
     public int curSelectLevel;//当前选择的关卡    
     public float volume;//音量大小
     public bool anthonyIsDead;
-    
+    public float joyStickSize;//虚拟摇杆的尺寸
+
     public GunLevel gunLevel;
     public List<WeaponProperties> weaponPropertiesList;
     public bool isBossDead;
 
     [HideInInspector]
     public Player player;
-
-    private float joyStickSize;//虚拟摇杆的尺寸
+    [HideInInspector]
+    public GameUIManager gameUIManager;
+    
 
 
     public override void Init()
@@ -39,7 +41,8 @@ public class GameManager : MonoSingleton<GameManager>
         weaponPropertiesList = new List<WeaponProperties>();
         //SaveByJson();
         LoadWeaponPropertiesInfo();
-        LoadMainScene();
+        //LoadMainScene();
+        LoadGameData();
     }
 
     /// <summary>
@@ -52,6 +55,7 @@ public class GameManager : MonoSingleton<GameManager>
         volume = PlayerPrefs.HasKey("Volume") ? PlayerPrefs.GetFloat("Volume") : 1;
         joyStickSize = PlayerPrefs.HasKey("joyStickSize") ? PlayerPrefs.GetFloat("joyStickSize") : 0.3f;
         curSelectLevel = 1;
+        gunLevel = GunLevel.Pistol;
     }
 
 

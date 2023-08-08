@@ -99,15 +99,16 @@ public class Player : MonoBehaviour
     /// </summary>
     private void RegonHP() 
     {
-        if (curHp >= maxHP)
-        {
-            return;
-        }
+        //if (curHp >= maxHP)
+        //{
+        //    return;
+        //}
 
         if (delayTimer <= 0 && curHp < maxHP)
         {
             curHp += regenHpSpeed * Time.deltaTime;
-            curHp = curHp > maxHP ? maxHP : curHp;
+            LimitHP();
+
         }
         else if(delayTimer > 0)
         {
@@ -125,17 +126,15 @@ public class Player : MonoBehaviour
                 Instantiate(blood, transform.position, Quaternion.Euler(0, 0, collision.transform.rotation.eulerAngles.z + 180));
                 DestroyItem(collision.gameObject);
                 curHp -= 10;
+                LimitHP();
                 Die();
                 break;
             case "BulletItem":                
                 if (playerShoot.curBullets < playerShoot.totalBullets)
-                {
-                    DestroyItem(collision.gameObject);
+                {                    
                     playerShoot.curBullets += (int)(playerShoot.totalBullets * 0.25f);
-                    if (playerShoot.curBullets > playerShoot.totalBullets)
-                    {
-                        playerShoot.curBullets = playerShoot.totalBullets;
-                    }
+                    playerShoot.LimitBullet();
+                    DestroyItem(collision.gameObject);
                 }
                 break;
             case "HealthItem":
@@ -143,10 +142,7 @@ public class Player : MonoBehaviour
                 {
                     DestroyItem(collision.gameObject);
                     curHp += 20;
-                    if (curHp > maxHP)
-                    {
-                        curHp = maxHP;
-                    }
+                    LimitHP();
                 }
                 break;
             case "MineItem":
@@ -154,6 +150,7 @@ public class Player : MonoBehaviour
                 {
                     DestroyItem(collision.gameObject);
                     playerShoot.curMine += 1;
+                    GameManager.Instance.gameUIManager.UpdateMineUI((float)playerShoot.curMine / playerShoot.mines);
                 }
                 break;
             case "TurretItem":
@@ -161,6 +158,7 @@ public class Player : MonoBehaviour
                 {
                     DestroyItem(collision.gameObject);
                     playerShoot.hasTurret = true;
+                    GameManager.Instance.gameUIManager.UpdateTurretUI(playerShoot.hasTurret);
                 }
                 break;
             case "MoneyItem":
@@ -175,6 +173,7 @@ public class Player : MonoBehaviour
                 //地雷
                 Instantiate(explosion, transform.position, Quaternion.identity);
                 curHp -= 60;
+                LimitHP();
                 Destroy(collision.gameObject);
                 Die();
                 break;
@@ -193,11 +192,8 @@ public class Player : MonoBehaviour
                 if (playerShoot.curBullets < playerShoot.totalBullets)
                 {
                     playerShoot.curBullets += (int)(playerShoot.totalBullets * 0.25f);
-                    DestroyItem(collision.gameObject);
-                    if (playerShoot.curBullets > playerShoot.totalBullets)
-                    {
-                        playerShoot.curBullets = playerShoot.totalBullets;
-                    }
+                    playerShoot.LimitBullet();
+                    DestroyItem(collision.gameObject);                    
                 }              
             }
             else if (collision.gameObject.name.Contains("Health")) 
@@ -207,10 +203,7 @@ public class Player : MonoBehaviour
                 {
                     DestroyItem(collision.gameObject);
                     curHp += 20;
-                    if (curHp > maxHP)
-                    {
-                        curHp = maxHP;
-                    }
+                    LimitHP();
                 }
             }
             else if (collision.gameObject.name.Contains("Turret"))
@@ -220,11 +213,13 @@ public class Player : MonoBehaviour
                 {
                     DestroyItem(collision.gameObject);
                     playerShoot.curMine += 1;
+                    GameManager.Instance.gameUIManager.UpdateMineUI((float)playerShoot.curMine / playerShoot.mines);
                 }
                 if (!playerShoot.hasTurret)
                 {
                     DestroyItem(collision.gameObject);
                     playerShoot.hasTurret = true;
+                    GameManager.Instance.gameUIManager.UpdateTurretUI(playerShoot.hasTurret);
                 }
             }
 
@@ -249,5 +244,22 @@ public class Player : MonoBehaviour
             Instantiate(deadBooldGo, transform.position, transform.rotation);
             Destroy(gameObject);
         }
+    }
+
+
+    /// <summary>
+    ///限制血量值和更新血条
+    /// </summary>
+    public void LimitHP() 
+    {
+        if (curHp >= maxHP)
+        {
+            curHp = maxHP;
+        }
+        else if (curHp < 0)
+        {
+            curHp = 0;
+        }
+        GameManager.Instance.gameUIManager.UpdateHPSlider(curHp / maxHP);
     }
 }

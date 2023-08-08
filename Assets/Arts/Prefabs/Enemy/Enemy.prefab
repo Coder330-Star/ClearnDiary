@@ -176,6 +176,7 @@ MonoBehaviour:
   layer:
     serializedVersion: 2
     m_Bits: 565
+  isBoss: 0
   bloodGos:
   - {fileID: 3176315250013321628, guid: 20b73db1aa106374d9b0c0912f0a01d4, type: 3}
   - {fileID: 8049979942541926326, guid: f5b7585796db53a409a6a171c15ad605, type: 3}
@@ -193,7 +194,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7455686412476842569}
   - component: {fileID: 7455686412476842568}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: MinMapIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,7 +210,7 @@ Transform:
   m_GameObject: {fileID: 7455686412476842570}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7455686412254981178}

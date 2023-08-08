@@ -66,7 +66,7 @@ public class Turret : MonoBehaviour
 
         if (isEnemy)
         {
-            hit2D = Physics2D.Raycast(transform.position, player.transform.position - transform.position, 3, layer);
+            hit2D = Physics2D.Raycast(transform.position, player.transform.position - transform.position, 10, layer);
             Debug.DrawRay(transform.position, player.transform.position - transform.position, Color.red);
             if (hit2D.collider != null)
             {
@@ -103,7 +103,7 @@ public class Turret : MonoBehaviour
         {
             for (int i = 0; i < player.enemys.Count; i++)
             {
-                hit2D = Physics2D.Raycast(transform.position, player.enemys[i].transform.position - transform.position, 10, layer);
+                hit2D = Physics2D.Raycast(transform.position, player.enemys[i].transform.position - transform.position, 3, layer);
                 Debug.DrawRay(transform.position, player.enemys[i].transform.position - transform.position, Color.red);
                 if (hit2D.collider != null)
                 {
@@ -141,18 +141,11 @@ public class Turret : MonoBehaviour
                 if (curAttackCD <= 0 && bullets > 0)
                 {
                     Instantiate(bulletGo, shootPoints[0].position, Quaternion.Euler(0, 0, transform.eulerAngles.z +
-                        Random.Range(-inaccuracy, inaccuracy)));
-                    if (turretLevel >= 3)
-                    {
-                        Instantiate(bulletGo, shootPoints[1].position, Quaternion.Euler(0, 0, transform.eulerAngles.z +
-                        Random.Range(-inaccuracy, inaccuracy)));
-                    }
+                        Random.Range(-inaccuracy, inaccuracy)));                    
                     au.PlayOneShot(shootClip, GameManager.Instance.volume * 0.6f);
                     curAttackCD = attackCD;
                     bullets -= 1;
                 }
-
-
             }
             else
             {
@@ -171,11 +164,14 @@ public class Turret : MonoBehaviour
             if (nearestEnemy != null)
             {
                 mark.transform.position = nearestEnemy.transform.position;
-                if (hit2D.collider.CompareTag("Wall"))
+                if (hit2D.collider != null)
                 {
-                    nearestEnemy = null;
-                    minDis = maxDis = 7;
-                }
+                    if (hit2D.collider.CompareTag("Wall"))
+                    {
+                        nearestEnemy = null;
+                        minDis = maxDis = 7;
+                    }
+                }                
             }
             else
             {

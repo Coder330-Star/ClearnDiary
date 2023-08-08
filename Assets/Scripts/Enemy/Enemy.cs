@@ -105,6 +105,7 @@ public class Enemy : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             player.curHp -= 0.1f;
+            player.LimitHP();
             player.delayTimer = player.delayRegen;
             player.Die();
         }

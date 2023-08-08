@@ -10,13 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 6211595047399781029}
   - component: {fileID: 6211595047399781050}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: MinMapIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6211595047399781029
 Transform:
   m_ObjectHideFlags: 0
@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 6211595047399781028}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6211595048551646587}
@@ -397,7 +397,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6211595047720666148}
   - {fileID: 6211595048474639093}
@@ -559,6 +559,7 @@ MonoBehaviour:
   layer:
     serializedVersion: 2
     m_Bits: 563
+  isBoss: 0
   bloodGos:
   - {fileID: 3176315250013321628, guid: 20b73db1aa106374d9b0c0912f0a01d4, type: 3}
   - {fileID: 8049979942541926326, guid: f5b7585796db53a409a6a171c15ad605, type: 3}

@@ -157,6 +157,7 @@ public class PlayerShoot : MonoBehaviour
             {
                 hasTurret = false;
                 Instantiate(turrets[turretLevel-1], transform.position, Quaternion.identity);
+                GameManager.Instance.gameUIManager.UpdateTurretUI(hasTurret);
             }
         }
 
@@ -169,6 +170,7 @@ public class PlayerShoot : MonoBehaviour
             }
             curMine -= 1;
             Instantiate(minePrefabs, transform.position, Quaternion.identity);
+            GameManager.Instance.gameUIManager.UpdateMineUI((float)curMine / mines);
         }
 
     }
@@ -210,7 +212,9 @@ public class PlayerShoot : MonoBehaviour
                 flash.Play();
             }
             curMagazine -= 1;
+            GameManager.Instance.gameUIManager.UpdateReloadAndMagzineUI((float)curMagazine / magazine);
             curBullets -= 1;
+            LimitBullet();
             curAttackCD = attackCD;
             curInaccuracy += recoilForce;
             if (curInaccuracy > maxInaccuracy)
@@ -233,6 +237,7 @@ public class PlayerShoot : MonoBehaviour
     {
         if (curMagazine < magazine)
         {
+            GameManager.Instance.gameUIManager.UpdateReloadAndMagzineUI((float)curMagazine / magazine);
             au.PlayOneShot(reloadClip,GameManager.Instance.volume);
             curReload = reload;
             curMagazine = 0;
@@ -245,15 +250,16 @@ public class PlayerShoot : MonoBehaviour
     /// </summary>
     private void CalculateCD() 
     {
-        if (attackCD > 0)
+        if (curAttackCD > 0)
         {
-            attackCD -= Time.deltaTime;
+            curAttackCD -= Time.deltaTime;
         }
-
+        GameManager.Instance.gameUIManager.UpdateAttackCDUI((attackCD-curAttackCD) / attackCD);
         if (curReload > 0)
         {
             //表示装弹中
             curReload -= Time.deltaTime;
+            GameManager.Instance.gameUIManager.UpdateReloadAndMagzineUI((reload - curReload) / reload);
         }
         else
         {
@@ -289,6 +295,22 @@ public class PlayerShoot : MonoBehaviour
                         new Vector3(0, 0, transform.eulerAngles.z + Random.Range(-curInaccuracy, curInaccuracy))));
         }
                
+    }
+
+    /// <summary>
+    ///限制子弹数和更新子弹条
+    /// </summary>
+    public void LimitBullet()
+    {
+        if (curBullets >= totalBullets)
+        {
+            curBullets = totalBullets;
+        }
+        else if (curBullets < 0)
+        {
+            curBullets = 0;
+        }
+        GameManager.Instance.gameUIManager.UpdateBulletSlider((float)curBullets / totalBullets);
     }
 }
 
