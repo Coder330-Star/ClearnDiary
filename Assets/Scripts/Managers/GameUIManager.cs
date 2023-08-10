@@ -21,9 +21,9 @@ public class GameUIManager : MonoBehaviour
     {
         canvasGroup = GetComponent<CanvasGroup>();
         GameManager.Instance.gameUIManager = this;
-#if !UNITY_STANDALONE_WIN
+#if UNITY_STANDALONE_WIN
         canvasGroup.interactable = false;
-        //joyStick.SetActive(false);
+        joyStick.SetActive(false);
         weaponImg.gameObject.SetActive(true);
         weaponImg.sprite = weaponSprs[((int)GameManager.Instance.gunLevel) - 1];
 #elif UNITY_ANDROID
@@ -33,7 +33,7 @@ public class GameUIManager : MonoBehaviour
 #endif
     }
 
-
+    #region UI更新方法
     /// <summary>
     /// 更新血条
     /// </summary>
@@ -91,4 +91,32 @@ public class GameUIManager : MonoBehaviour
     {
         imgReloadCD.fillAmount = value;
     }
+
+    #endregion
+
+
+    #region 按钮方法
+
+    public void SetMine() 
+    {
+        GameManager.Instance.player.playerShoot.SetMine();
+    }
+
+    public void SetTurret() 
+    {
+        GameManager.Instance.player.playerShoot.SetTurret();
+    }
+
+    public void Reload() 
+    {
+        GameManager.Instance.player.playerShoot.RelaodBullects();
+    }
+
+    public void Attack() 
+    {
+        GameManager.Instance.player.playerShoot.Shoot();
+    }
+
+    #endregion
+
 }

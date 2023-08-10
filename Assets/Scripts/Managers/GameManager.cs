@@ -5,6 +5,8 @@ using System.IO;
 using UnityEngine.SceneManagement;
 using System.Text;
 using System;
+using UnityEngine.Networking;
+using System.Collections;
 
 public enum GunLevel 
 {
@@ -38,15 +40,23 @@ public class GameManager : MonoSingleton<GameManager>
     public GameUIManager gameUIManager;
 
     public string[] stories;
-
+    public Vector2 inputValue;
+    public float inputAngle;
 
     public override void Init()
     {
         DontDestroyOnLoad(gameObject);
-        weaponPropertiesList = new List<WeaponProperties>();        
+        weaponPropertiesList = new List<WeaponProperties>();
+#if UNITY_STANDALONE_WIN
         LoadWeaponPropertiesInfo();
         LoadStories();
+
+#elif UNITY_ANDROID
+        StartCoroutine(LoadWeaponPropertiesInfo());
+        StartCoroutine(LoadStories());
+#endif
         LoadGameData();
+
         //SaveByJson();
     }
 
@@ -94,6 +104,10 @@ public class GameManager : MonoSingleton<GameManager>
         sw.Close();
     }
 
+#if UNITY_STANDALONE_WIN
+    /// <summary>
+    /// 加载武器属性
+    /// </summary>
     private void LoadWeaponPropertiesInfo()
     {
         weaponPropertiesList = new List<WeaponProperties>();
@@ -114,7 +128,7 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     /// <summary>
-    /// 
+    /// 读取故事情节
     /// </summary>
     private void LoadStories()
     {
@@ -128,11 +142,59 @@ public class GameManager : MonoSingleton<GameManager>
 
             if (stories.Length == 0)
             {
-                Debug.Log("读取武器信息配置表失败！！");               
+                Debug.Log("读取故事信息配置表失败！！");               
             }
         }
     }
 
+#elif UNITY_ANDROID
+    public IEnumerator LoadWeaponPropertiesInfo() 
+    {
+        weaponPropertiesList = new List<WeaponProperties>();
+        string filePath = Application.streamingAssetsPath + "/WeaponProperties.json";
+        //UnityWebRequest
+        UnityWebRequest uWRequest = UnityWebRequest.Get(filePath);
+        yield return uWRequest.SendWebRequest();
+        string json = uWRequest.downloadHandler.text;        
+
+        ///www弃用了
+        //WWW www = new WWW(filePath);
+        //while (!www.isDone)
+        //{
+        //    yield return null;
+        //}
+        //string json = www.text;
+        weaponPropertiesList = JsonMapper.ToObject<List<WeaponProperties>>(json);
+        if (weaponPropertiesList.Count == 0)
+        {
+            Debug.Log("读取武器信息配置表失败！！");
+        }
+    }
+
+    private IEnumerator LoadStories() 
+    {
+        string filePath = Application.streamingAssetsPath + "/WeaponProperties.json";
+
+        //UnityWebRequest
+        UnityWebRequest uWRequest = UnityWebRequest.Get(filePath);
+        yield return uWRequest.SendWebRequest();
+        string json = uWRequest.downloadHandler.text;
+
+        //www弃用了
+        //WWW www = new WWW(filePath);
+        //while (!www.isDone)
+        //{
+        //    yield return null;
+        //}
+        //string json = www.text;
+        stories = JsonMapper.ToObject<string[]>(json);
+        if (weaponPropertiesList.Count == 0)
+        {
+            Debug.Log("读取故事信息配置表失败！！");
+        }
+    }
+
+#endif
 
     public void LoadMainScene() 
     {

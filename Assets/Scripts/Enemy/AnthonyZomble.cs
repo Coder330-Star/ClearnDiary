@@ -22,6 +22,7 @@ public class AnthonyZomble : EnemySoldier
         base.Start(); 
         if (GameManager.Instance.anthonyIsDead)
         {
+            GameManager.Instance.player.enemys.Remove(this);
             Destroy(gameObject);
         }
         curTurretCD = 10;

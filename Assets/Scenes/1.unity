@@ -4963,6 +4963,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1195374260231376884, guid: 4f34cea9b189b3644809fdc98fb578d1, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 330
+      objectReference: {fileID: 0}
+    - target: {fileID: 1195374260231376884, guid: 4f34cea9b189b3644809fdc98fb578d1, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 330
+      objectReference: {fileID: 0}
+    - target: {fileID: 4357288642401913275, guid: 4f34cea9b189b3644809fdc98fb578d1, type: 3}
+      propertyPath: m_Color.b
+      value: 0.7176471
+      objectReference: {fileID: 0}
+    - target: {fileID: 4357288642401913275, guid: 4f34cea9b189b3644809fdc98fb578d1, type: 3}
+      propertyPath: m_Color.g
+      value: 0.7176471
+      objectReference: {fileID: 0}
+    - target: {fileID: 4357288642401913275, guid: 4f34cea9b189b3644809fdc98fb578d1, type: 3}
+      propertyPath: m_Color.r
+      value: 0.7176471
+      objectReference: {fileID: 0}
     - target: {fileID: 5727313836804620687, guid: 4f34cea9b189b3644809fdc98fb578d1, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -5058,14 +5078,6 @@ PrefabInstance:
     - target: {fileID: 5727313837032177427, guid: 4f34cea9b189b3644809fdc98fb578d1, type: 3}
       propertyPath: m_Name
       value: Canvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 5727313837032177427, guid: 4f34cea9b189b3644809fdc98fb578d1, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5727313838050997071, guid: 4f34cea9b189b3644809fdc98fb578d1, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5727313838164285720, guid: 4f34cea9b189b3644809fdc98fb578d1, type: 3}
       propertyPath: m_AnchorMax.x

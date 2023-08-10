@@ -88,7 +88,9 @@ public class PlayerShoot : MonoBehaviour
         CalculateDestabilization();
         CalculateInaccuracy();
         CalculateCD();
+#if UNITY_STANDALONE_WIN
         MonitorInput();
+#endif
     }
 
 
@@ -153,24 +155,13 @@ public class PlayerShoot : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.T))
         {
             ///炮塔
-            if (hasTurret)
-            {
-                hasTurret = false;
-                Instantiate(turrets[turretLevel-1], transform.position, Quaternion.identity);
-                GameManager.Instance.gameUIManager.UpdateTurretUI(hasTurret);
-            }
+            SetTurret();
         }
 
         if (Input.GetKeyDown(KeyCode.M))
         {
             //地雷
-            if (curMine <= 0)
-            {
-                return;
-            }
-            curMine -= 1;
-            Instantiate(minePrefabs, transform.position, Quaternion.identity);
-            GameManager.Instance.gameUIManager.UpdateMineUI((float)curMine / mines);
+            SetMine();
         }
 
     }
@@ -178,7 +169,7 @@ public class PlayerShoot : MonoBehaviour
     /// <summary>
     /// 射击
     /// </summary>
-    private void Shoot() 
+    public void Shoot() 
     {
         //有子弹，弹夹里面有子弹，攻击cd<0
         if (curBullets > 0 && curMagazine > 0 && curAttackCD <= 0)
@@ -233,7 +224,7 @@ public class PlayerShoot : MonoBehaviour
     /// <summary>
     /// 重新装子弹
     /// </summary>
-    private void RelaodBullects() 
+    public void RelaodBullects() 
     {
         if (curMagazine < magazine)
         {
@@ -311,6 +302,35 @@ public class PlayerShoot : MonoBehaviour
             curBullets = 0;
         }
         GameManager.Instance.gameUIManager.UpdateBulletSlider((float)curBullets / totalBullets);
+    }
+
+
+    /// <summary>
+    /// 使用地雷
+    /// </summary>
+    public void SetMine()
+    {
+        if (curMine <= 0)
+        {
+            return;
+        }
+        curMine -= 1;
+        Instantiate(minePrefabs, transform.position, Quaternion.identity);
+        GameManager.Instance.gameUIManager.UpdateMineUI((float)curMine / mines);
+    }
+
+
+    /// <summary>
+    /// 使用炮塔
+    /// </summary>
+    public void SetTurret() 
+    {
+        if (hasTurret)
+        {
+            hasTurret = false;
+            Instantiate(turrets[turretLevel - 1], transform.position, Quaternion.identity);
+            GameManager.Instance.gameUIManager.UpdateTurretUI(hasTurret);
+        }
     }
 }
 

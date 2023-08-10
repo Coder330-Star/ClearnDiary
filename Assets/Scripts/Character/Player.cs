@@ -73,6 +73,9 @@ public class Player : MonoBehaviour
     private void Move() 
     {
         isMoving = false;
+
+
+#if UNITY_STANDALONE_WIN
         if (Input.GetKey(KeyCode.W))
         {
             //前
@@ -101,7 +104,20 @@ public class Player : MonoBehaviour
             rig2D.AddForce(Vector2.right * speed / (1 + playerShoot.weight * 0.1f) * 70 * Time.deltaTime);
             moveAngle = -90;
             isMoving = true;
-        }        
+        }
+#elif UNITY_ANDROID        
+        rig2D.AddForce(new Vector2(GameManager.Instance.inputValue.x * speed / (1 + playerShoot.weight * 0.1f) * 70 * Time.deltaTime,
+            GameManager.Instance.inputValue.y * speed / (1 + playerShoot.weight * 0.1f) * 70 * Time.deltaTime));
+        moveAngle = GameManager.Instance.inputAngle;
+        if (GameManager.Instance.inputValue != Vector2.zero)
+        {
+            isMoving = true;
+        }
+        else
+        {
+            isMoving = false;
+        }
+#endif
     }
 
 
