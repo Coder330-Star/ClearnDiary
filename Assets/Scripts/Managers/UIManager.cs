@@ -120,17 +120,20 @@ public class UIManager : MonoBehaviour
             if ( GameManager.Instance.money >= weaponPrice[i])
             {
                 //表示解锁
-                imgSelectedWeapon[i].color = new Color(0, 1, 0, 1);
-                txtWeaponPrices[i].color = new Color(0, 1, 0, 1);
+                imgSelectedWeapon[i].color = new Color(0, 1, 0, 0.3f);
+                txtWeaponPrices[i].color = new Color(0, 1, 0, 0.3f);
                 btnSelectedWeapons[i].interactable = true;                
             }
             else
             {
-                imgSelectedWeapon[i].color = new Color(1, 0, 0, 0.5f);
-                txtWeaponPrices[i].color = new Color(1, 0, 0, 0.5f);
+                imgSelectedWeapon[i].color = new Color(1, 0, 0, 0.3f);
+                txtWeaponPrices[i].color = new Color(1, 0, 0, 0.3f);
                 btnSelectedWeapons[i].interactable = false;
             }
         }
+
+        imgSelectedWeapon[((int)GameManager.Instance.gunLevel)-1].color = new Color(0, 1, 0, 1);
+        txtWeaponPrices[((int)GameManager.Instance.gunLevel) - 1].color = new Color(0, 1, 0, 1);
     }
 
     private void InitLevels() 
@@ -140,8 +143,8 @@ public class UIManager : MonoBehaviour
             if (GameManager.Instance.unlockLevel >= i + 1)
             {
                 //表示解锁
-                imgLevels[i].color = new Color(0, 1, 0, 1);
-                txtLevels[i].color = new Color(0, 1, 0, 1);
+                imgLevels[i].color = new Color(0, 1, 0, 0.3f);
+                txtLevels[i].color = new Color(0, 1, 0, 0.3f);
                 btnLevels[i].interactable = true;
             }
             else
@@ -151,6 +154,8 @@ public class UIManager : MonoBehaviour
                 btnLevels[i].interactable = false;
             }
         }
+        imgLevels[GameManager.Instance.curSelectLevel-1].color = new Color(0, 1, 0, 1);
+        txtLevels[GameManager.Instance.curSelectLevel - 1].color = new Color(0, 1, 0, 1);
     }
 
     #endregion
@@ -190,7 +195,7 @@ public class UIManager : MonoBehaviour
 
     public void StartGame() 
     {
-        SceneManager.LoadScene(GameManager.Instance.curSelectLevel);
+        SceneManager.LoadScene(7);
     }
 
     #endregion
@@ -237,6 +242,7 @@ public class UIManager : MonoBehaviour
         GameManager.Instance.volume = 1;
         GameManager.Instance.money = 0;
         GameManager.Instance.joyStickSize = 0.3f;
+        GameManager.Instance.firstEnterLevels = new bool[6] { true, true, true, true, true, true };
         SceneManager.LoadScene(0);
     }
 
@@ -265,6 +271,7 @@ public class UIManager : MonoBehaviour
     {
         GameManager.Instance.curSelectLevel = levelIndex;
         //SceneManager.LoadScene(levelIndex);
+        InitLevels();
     }
 
     #endregion
@@ -274,6 +281,7 @@ public class UIManager : MonoBehaviour
     public void SelectGun(int gunIndex) 
     {
         GameManager.Instance.gunLevel = (GunLevel)gunIndex;
+        InitWeapon();
     }
 
     #endregion

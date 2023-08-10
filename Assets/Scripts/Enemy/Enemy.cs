@@ -39,6 +39,10 @@ public class Enemy : MonoBehaviour
         rigid2D = GetComponent<Rigidbody2D>();
         playerTrans = player.transform;
         curHp = HP;
+        //if (!GameManager.Instance.anthonyIsDead)
+        //{
+        //    Destroy(gameObject);
+        //}
     }
 
 

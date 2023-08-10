@@ -3,6 +3,8 @@ using UnityEngine;
 using LitJson;
 using System.IO;
 using UnityEngine.SceneManagement;
+using System.Text;
+using System;
 
 public enum GunLevel 
 {
@@ -27,22 +29,25 @@ public class GameManager : MonoSingleton<GameManager>
     public GunLevel gunLevel;
     public List<WeaponProperties> weaponPropertiesList;
     public bool isBossDead;
+    public bool showEnd;
+    public bool[] firstEnterLevels;
 
     [HideInInspector]
     public Player player;
     [HideInInspector]
     public GameUIManager gameUIManager;
-    
+
+    public string[] stories;
 
 
     public override void Init()
     {
         DontDestroyOnLoad(gameObject);
-        weaponPropertiesList = new List<WeaponProperties>();
-        //SaveByJson();
+        weaponPropertiesList = new List<WeaponProperties>();        
         LoadWeaponPropertiesInfo();
-        //LoadMainScene();
+        LoadStories();
         LoadGameData();
+        //SaveByJson();
     }
 
     /// <summary>
@@ -54,8 +59,25 @@ public class GameManager : MonoSingleton<GameManager>
         unlockLevel = PlayerPrefs.HasKey("UnlockLevel") ? PlayerPrefs.GetInt("UnlockLevel") : 1;
         volume = PlayerPrefs.HasKey("Volume") ? PlayerPrefs.GetFloat("Volume") : 1;
         joyStickSize = PlayerPrefs.HasKey("joyStickSize") ? PlayerPrefs.GetFloat("joyStickSize") : 0.3f;
+        if (PlayerPrefs.HasKey("firstEnter"))
+        {
+            firstEnterLevels = GetBoolArray("firstEnter");
+        }
+        else 
+        {
+            firstEnterLevels = new bool[6] { true, true, true, true, true, true };
+        }
+        if (PlayerPrefs.HasKey("AnthonyIsDead"))
+        {
+            anthonyIsDead = Convert.ToBoolean(PlayerPrefs.GetInt("AnthonyIsDead"));
+        }
+        else
+        {
+            anthonyIsDead = false;
+        }
         curSelectLevel = 1;
         gunLevel = GunLevel.Pistol;
+        SetBoolArray("firstEnter",firstEnterLevels);
     }
 
 
@@ -65,8 +87,8 @@ public class GameManager : MonoSingleton<GameManager>
     private void SaveByJson() 
     {
         //Json中无法识别float类型 可识别(bool,double,int,long,object,string)
-        string jsonPath = Application.streamingAssetsPath + "/WeaponProperties.json";
-        string saveJsonStr = JsonMapper.ToJson(weaponPropertiesList);
+        string jsonPath = Application.streamingAssetsPath + "/stories.json";
+        string saveJsonStr = JsonMapper.ToJson(stories);
         StreamWriter sw = new StreamWriter(jsonPath);
         sw.Write(saveJsonStr);
         sw.Close();
@@ -91,6 +113,26 @@ public class GameManager : MonoSingleton<GameManager>
         }        
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    private void LoadStories()
+    {
+        string filePath = Application.streamingAssetsPath + "/stories.json";
+        if (File.Exists(filePath))
+        {
+            StreamReader sr = new StreamReader(filePath);
+            string info = sr.ReadToEnd();
+            sr.Close();
+            stories = JsonMapper.ToObject<string[]>(info);
+
+            if (stories.Length == 0)
+            {
+                Debug.Log("读取武器信息配置表失败！！");               
+            }
+        }
+    }
+
 
     public void LoadMainScene() 
     {
@@ -103,4 +145,34 @@ public class GameManager : MonoSingleton<GameManager>
     {
         SceneManager.LoadScene(0);
     }
+
+
+    public void SetBoolArray(string key,bool[] array) 
+    {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < array.Length-1; i++)
+        {
+            sb.Append(array[i]).Append("|");
+        }
+        sb.Append(array[array.Length - 1]);
+        PlayerPrefs.SetString(key, sb.ToString());
+    }
+
+    public bool[] GetBoolArray(string key) 
+    {
+        if (string.IsNullOrEmpty(PlayerPrefs.GetString(key)))
+        {
+            return new bool[10];
+        }
+        string[] strArry = PlayerPrefs.GetString(key).Split("|");
+        bool[] boolArray = new bool[strArry.Length];
+        for (int i = 0; i < strArry.Length; i++)
+        {
+            boolArray[i] = Convert.ToBoolean(strArry[i]);
+        }
+
+        return boolArray;
+
+    }
+
 }

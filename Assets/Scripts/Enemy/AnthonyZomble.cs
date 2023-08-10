@@ -19,7 +19,11 @@ public class AnthonyZomble : EnemySoldier
 
     protected override void Start()
     {
-        base.Start();
+        base.Start(); 
+        if (GameManager.Instance.anthonyIsDead)
+        {
+            Destroy(gameObject);
+        }
         curTurretCD = 10;
     }
 

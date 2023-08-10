@@ -4,13 +4,27 @@ using UnityEngine;
 
 public class Fading : MonoBehaviour
 {
+    public AudioClip enemyDieClip;
+    public AudioClip playerDieClip;
+    public bool isEnemyDie;
+
     private SpriteRenderer sp;
+    private AudioSource au;
     private float speed=0.01f;
     private float delayTime = 2;
 
     private void Start()
     {
         sp = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        au = GetComponent<AudioSource>();
+        if (isEnemyDie)
+        {
+            au.PlayOneShot(enemyDieClip, GameManager.Instance.volume);
+        }
+        else
+        {
+            au.PlayOneShot(playerDieClip, GameManager.Instance.volume);
+        }
         StartCoroutine(StartFading());
     }
 

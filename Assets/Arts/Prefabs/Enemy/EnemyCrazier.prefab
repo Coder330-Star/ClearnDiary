@@ -340,7 +340,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 9
   HP: 40
-  reward: 20
+  reward: 2
   layer:
     serializedVersion: 2
     m_Bits: 565

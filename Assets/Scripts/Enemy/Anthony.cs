@@ -14,11 +14,12 @@ public class Anthony : Enemy
     }
 
     protected override void Die()
-    {
-        base.Die();
+    {        
         if (curHp <= 0)
         {
             GameManager.Instance.anthonyIsDead = true;
+            PlayerPrefs.SetInt("AnthonyIsDead", 1);
         }
+        base.Die();
     }
 }

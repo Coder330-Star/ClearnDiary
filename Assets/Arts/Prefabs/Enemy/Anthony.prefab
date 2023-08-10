@@ -396,7 +396,7 @@ MonoBehaviour:
   - {fileID: 3176315250013321628, guid: 20b73db1aa106374d9b0c0912f0a01d4, type: 3}
   - {fileID: 8049979942541926326, guid: f5b7585796db53a409a6a171c15ad605, type: 3}
   - {fileID: 727787897686530715, guid: 1b611b3a900b31c4cb87aad5fd0a7907, type: 3}
-  bloodDeadGo: {fileID: 3390900171794586862, guid: e8792ebb264f8734cab6519d0ee1b015, type: 3}
+  bloodDeadGo: {fileID: 3390900171794586862, guid: 0aab290e7ddb1b44c9eb8dbe3e528ac9, type: 3}
   bloodPS: {fileID: 6967162595093400266, guid: 04e004e00b3b08a41a1e7d3697e9490c, type: 3}
   explosion: {fileID: 6899763930569113215, guid: 541e643acf6aa3841be6d18dd0afc02a, type: 3}
   bulletGo: {fileID: 2164840517755523541, guid: 8adb4a6a53a8d7f4eba78b7583f21ee1, type: 3}

@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
     public List<Enemy> enemys = new List<Enemy>();
     public PlayerShoot playerShoot;
     public bool bossIsDead;
+    private bool decreasHP;//被安东尼感染后持续掉血
 
     //[Header("*********组件**********")]
     private Rigidbody2D rig2D;
@@ -51,11 +52,21 @@ public class Player : MonoBehaviour
             //表示是boss
             bossIsDead = false;
         }
+        if (GameManager.Instance.curSelectLevel == 6 && !GameManager.Instance.anthonyIsDead)
+        {
+            decreasHP = true;
+        }
     }
 
     private void Update()
     {
         Move();
+        if (decreasHP)
+        {
+            curHp -= 1 * Time.deltaTime;
+            LimitHP();
+            Die();
+        }
         RegonHP();
     }
 

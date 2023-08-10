@@ -22,7 +22,8 @@ public class FinishPoint : MonoBehaviour
             if (player.curKills >= player.targetkills && player.bossIsDead)
             {
                 PlayerPrefs.SetInt("Money", GameManager.Instance.money);
-                PlayerPrefs.SetInt("UnlockLevel", GameManager.Instance.unlockLevel + 1);
+                GameManager.Instance.unlockLevel += 1;
+                PlayerPrefs.SetInt("UnlockLevel", GameManager.Instance.unlockLevel);
                 SceneManager.LoadScene(0);
             }
         }
